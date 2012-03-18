@@ -3,11 +3,8 @@
 	//
 	// 
 	//
-	// 		-webkit-transition: all 1s ease;
-	// 		-moz-transition: all 1s ease;
-	// 		-o-transition: all 1s ease;
-	// 		-ms-transition: all 1s ease;
-	// 		transition: all 1s ease;	
+
+	var browserPrefixes = ['webkit', 'moz', 'o', 'ms'];
 
 	var smStyleSheet = (function () {
 		var ss = createLmnt('style', {'type':'text/css'});		
@@ -24,8 +21,7 @@
 				'width: 0%',
 				'height: 100%',
 				'box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45)',
-				'-webkit-transition: all 0.25s ease'
-			]
+			].concat(browserSpecific('transition: all 0.25s ease'))
 		});
 		return ss;
 	})();
@@ -33,11 +29,6 @@
 	//
 	// Constructor and SimpleMeter definition
 	//
-	// topColor
-	// bottomColor
-	// borderRadius
-	// height
-	// width
 
 	var SimpleMeter = function (container, settings) {
 		settings = objMerge(settings || {}, {
@@ -143,6 +134,15 @@
 			ele.style[key] = styles[key];
 		}
 		return ele;
+	}
+
+	function browserSpecific (rule) {
+		var rules = [];
+		for (var p in browserPrefixes) {
+			rules.push('-' + browserPrefixes[p] + '-' + rule);
+		}
+		rules.push(rule);
+		return rules;	
 	}
 
 })(window, document);

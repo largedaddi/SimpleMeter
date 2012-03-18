@@ -21,7 +21,7 @@
 				'width: 0%',
 				'height: 100%',
 				'box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45)',
-			].concat(browserSpecific('transition: all 0.25s ease'))
+			]
 		});
 		return ss;
 	})();
@@ -84,7 +84,17 @@
 
 			width = (width > 100) ? 100 : ((width < 0) ? 0 : width);
 
+			var bsTransitions = browserSpecific('transition: all ' + (((width / 2) / 100) + 0.25) + 's ease');
+			var bsTransitionsHash = {};
+			var cssRuleArray;
 			var self = this;
+
+			for (var i in bsTransitions) {
+				cssRuleArray = bsTransitions[i].split(':');
+				bsTransitionsHash[cssRuleArray[0]] = cssRuleArray[1];
+			}
+			this.powerBar = addStyle(this.powerBar, bsTransitionsHash);
+
 			setTimeout(function () {
 				self.powerBar = addStyle(self.powerBar, {
 					'width': width + '%'
